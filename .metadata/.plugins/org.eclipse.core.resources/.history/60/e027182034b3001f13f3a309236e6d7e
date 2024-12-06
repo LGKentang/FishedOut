@@ -1,0 +1,12 @@
+package enums.fish;
+
+public enum FishRarity {
+	Common,
+	Rare,
+	Epic,
+	Legendary,
+	Mythic
+	
+	
+	
+}

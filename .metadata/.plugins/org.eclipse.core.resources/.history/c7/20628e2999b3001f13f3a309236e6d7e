@@ -1,0 +1,18 @@
+package enums.fish;
+
+public enum FishRarity {
+	Common,
+	Rare,
+	Epic,
+	Legendary,
+	Mythic;
+	
+	private static final int[] basePrice = {
+			30,
+			75,
+			125,
+			200,
+			400
+	};
+
+}

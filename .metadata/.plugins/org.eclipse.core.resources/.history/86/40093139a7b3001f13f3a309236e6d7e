@@ -1,0 +1,36 @@
+package enums.fish;
+
+public enum FishType {
+	Axolotl, Bass, Circlefish, Clownfish, Cod, FlyingFish, Goldfish, Octopus, Pufferfish, Rainbow, Shell, Snail,
+	Starfish, Trash;
+
+	public static FishRarity[] rarities = { 
+			FishRarity.Mythic, 
+			FishRarity.Common, 
+			FishRarity.Rare, 
+			FishRarity.Rare,
+			FishRarity.Common, 
+			FishRarity.Epic, 
+			FishRarity.Rare, 
+			FishRarity.Epic, 
+			FishRarity.Rare, 
+			FishRarity.Mythic,
+			FishRarity.Legendary, 
+			FishRarity.Common, 
+			FishRarity.Legendary, 
+			FishRarity.Common 
+	};
+	
+	public final FishRarity getRarity() {
+		return rarities[this.ordinal()];
+	}
+	
+	public static FishType fromString(String type) {
+		for (FishType fr : FishType.values()) {
+			if (fr.name().equalsIgnoreCase(type)) {
+				return fr;
+			}
+		}
+		return null;
+	}
+}

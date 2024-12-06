@@ -1,0 +1,12 @@
+package enums.fish;
+
+public enum FishSize {
+	XS,
+	S,
+	M,
+	L,
+	XL,
+	XXL,
+	Jumbo,
+	MEGA
+}

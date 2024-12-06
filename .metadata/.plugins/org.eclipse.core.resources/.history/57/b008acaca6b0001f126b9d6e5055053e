@@ -1,0 +1,37 @@
+package main;
+
+import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpExchange;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        // Create HTTP server on port 8080
+        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+
+        // Create a handler for the /index route
+        server.createContext("/index", new HttpHandler() {
+            @Override
+            public void handle(HttpExchange exchange) throws IOException {
+                // Prepare a response
+                String response = "Hello, welcome to the /index API!";
+                // Set the response header with HTTP status code 200 (OK)
+                exchange.sendResponseHeaders(200, response.getBytes().length);
+                
+                // Write the response body
+                OutputStream os = exchange.getResponseBody();
+                os.write(response.getBytes());
+                os.close();
+            }
+        });
+
+        // Start the server
+        server.setExecutor(null); // Creates a default executor
+        System.out.println("Server started at http://localhost:8080");
+        server.start();
+    }
+}

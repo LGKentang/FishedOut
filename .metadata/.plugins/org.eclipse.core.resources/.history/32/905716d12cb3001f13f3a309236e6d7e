@@ -1,0 +1,10 @@
+package enums.rod;
+
+public enum RodRarity {
+	Default,
+	Common,
+	Rare,
+	Epic,
+	Legendary,
+	Mythic
+}

@@ -1,0 +1,65 @@
+package model;
+
+import enums.fish.FishRarity;
+import enums.fish.FishSize;
+
+public class Fish {
+	private String id;
+	private String name;
+	private FishSize size;
+	private FishRarity rarity;
+	private double price;
+
+	public Fish(String id, String name, String rarity, String size, double price) {
+		this.id = id;
+		this.name = name;
+		this.rarity = FishRarity.fromString(rarity);
+		this.size = FishSize.fromString(size);
+		this.price = price;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public FishSize getSize() {
+		return size;
+	}
+
+	public void setSize(FishSize size) {
+		this.size = size;
+	}
+
+	public FishRarity getRarity() {
+		return rarity;
+	}
+
+	public void setRarity(FishRarity rarity) {
+		this.rarity = rarity;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public String jsonify() {
+		return "{" + "\"id\": \"" + id + "\", " + "\"name\": \"" + name + "\", " + "\"rarity\": \"" + rarity + "\", "
+				+ "\"size\": " + size + ", " + "\"price\": " + price + "}";
+	}
+}

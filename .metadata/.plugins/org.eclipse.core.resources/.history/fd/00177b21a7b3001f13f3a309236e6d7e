@@ -1,0 +1,22 @@
+package factory;
+
+import java.util.Random;
+import java.util.UUID;
+
+import model.Fish;
+
+public class FishFactory {
+
+    private static final Random RANDOM = new Random();
+
+    
+    
+    public Fish createFish() {
+//        String name = 
+//        String rarity = 
+//        String id = UUID.randomUUID().toString(); 
+//        String size = "XXL";
+//        return new Fish(id, name, rarity, size, 0);  
+    }
+
+}

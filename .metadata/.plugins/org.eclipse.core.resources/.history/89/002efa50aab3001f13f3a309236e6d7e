@@ -1,0 +1,40 @@
+package model;
+
+import enums.rod.RodType;
+
+public class Rod {
+	private String id;
+	private RodType rodType;
+
+	public Rod(String id, RodType rodType) {
+		super();
+		this.rodType = rodType;
+		this.id = id;
+	}
+
+	public Rod(String id, String name) {
+		super();
+		this.rodType = RodType.fromString(name);
+		this.id = id;
+	}
+
+	// Getter for rodType
+	public RodType getRodType() {
+		return rodType;
+	}
+
+	// Setter for rodType
+	public void setRodType(RodType rodType) {
+		this.rodType = rodType;
+	}
+
+	// Getter for id
+	public String getId() {
+		return id;
+	}
+
+	// Setter for id
+	public void setId(String id) {
+		this.id = id;
+	}
+}

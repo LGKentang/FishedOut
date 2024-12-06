@@ -1,0 +1,50 @@
+package enums.rod;
+
+import java.util.Arrays;
+
+public enum RodRarity {
+	Default, Common, Rare, Epic, Legendary, Mythic;
+	
+	private static final int[] basePrice = {
+		0,
+		100,
+		200,
+		400,
+		1000,
+		2000
+	};
+
+	private static final double[][] probabilities = {
+			// 1 , 2 , 3 , 4 , 5 , 6 ,7 ,8 ,9
+			{ 0.8, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }, // Default
+			{ 0.7, 0.2, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 }, // Common
+			{ 0.4, 0.35, 0.2, 0.05, 0.0, 0.0, 0.0, 0.0, 0.0 }, // Rare
+			{ 0.3, 0.25, 0.25, 0.15, 0.05, 0.0, 0.0, 0.0, 0.0 }, // Epic
+			{ 0.2, 0.2, 0.2, 0.1, 0.1, 0.1, 0.1, 0.0, 0.0 }, // Legendary
+			{ 0.1, 0.1, 0.1, 0.2, 0.2, 0.1, 0.1, 0.05, 0.05 } // Mythic
+	};
+
+	private static final String[] colors = {
+			"#ADD8E6",
+			"#87CEEB",
+			"#6495ED",
+			"#1E90FF",
+			"#4169E1",
+			"#00008B",
+			"#800080",
+			"#FF0000",
+			"#000000"
+	};
+	
+	public static double[] getProbabilities(RodRarity rarity) {
+		return probabilities[rarity.ordinal()];
+	}
+
+	public static void main(String[] args) {
+		// Example usage
+		RodRarity rarity = RodRarity.Rare;
+		double[] rareProbabilities = RodRarity.getProbabilities(rarity);
+
+		System.out.println("Probabilities for " + rarity + ": " + Arrays.toString(rareProbabilities));
+	}
+}

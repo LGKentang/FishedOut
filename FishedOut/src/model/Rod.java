@@ -1,0 +1,21 @@
+package model;
+
+import enums.rod.RodType;
+
+public class Rod {
+	private RodType rodType;
+
+	public Rod(RodType rodType) {
+		super();
+		this.rodType = rodType;
+	}
+
+	public RodType getRodType() {
+		return rodType;
+	}
+
+	public void setRodType(RodType rodType) {
+		this.rodType = rodType;
+	}
+
+}

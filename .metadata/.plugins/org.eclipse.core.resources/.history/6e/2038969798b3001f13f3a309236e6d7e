@@ -1,0 +1,39 @@
+package enums.fish;
+
+public enum FishSize {
+	XS,
+	S,
+	M,
+	L,
+	XL,
+	XXL,
+	Jumbo,
+	MEGA,
+	UNKNOWN;
+	
+	
+	private static final String[] colors = {
+			"#ADD8E6",
+			"#87CEEB",
+			"#6495ED",
+			"#1E90FF",
+			"#4169E1",
+			"#00008B",
+			"#800080",
+			"#FF0000",
+			"#000000"
+	};
+	
+	public static final double[] multiplier = {
+			1,
+			1.2,
+			1.5,
+			2,
+			2.75,
+			3.25,
+			5,
+			10,
+			50
+	};
+	
+}

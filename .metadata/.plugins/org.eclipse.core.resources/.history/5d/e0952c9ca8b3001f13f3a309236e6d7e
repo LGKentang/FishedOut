@@ -1,0 +1,127 @@
+package main;
+
+import com.sun.net.httpserver.HttpServer;
+
+import factory.FishFactory;
+
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpExchange;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import model.Aquarium;
+import model.Fish;
+import model.Inventory;
+import model.Player;
+import model.Rod;
+
+public class Main {
+	private Player player;
+	private Inventory inventory;
+	private Aquarium aquarium;
+	
+	public static void main(String[] args) {
+		FishFactory ff = new FishFactory();
+		Player.getPlayer();
+		Player.getPlayer().setFishingRod(new Rod("20","Industrial"));
+		
+		System.out.println(ff.catchRandomFish());
+	}
+
+//	public static void main(String[] args) throws IOException {
+//		HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+//
+//		registerRoute(server, "/index", Main::handleIndexRoute);
+//		registerRoute(server, "/about", Main::handleAboutRoute);
+//		registerRoute(server, "/catchFish", Main::catchFish);
+//
+//		registerRoute(server, "/getMoney", Main::getMoney);
+//		registerRoute(server, "/rollChest", Main::rollChest);
+//		
+//		
+//		server.setExecutor(null);
+//		System.out.println("Server started at http://localhost:8080");
+//		server.start();
+//	}
+//
+//	private static void registerRoute(HttpServer server, String context, HttpHandler handler) {
+//		server.createContext(context, handler);
+//	}
+//
+//	private static void handleIndexRoute(HttpExchange exchange) throws IOException {
+//		String response = "Hello, welcome to the /index API!";
+//		exchange.sendResponseHeaders(200, response.getBytes().length);
+//		OutputStream os = exchange.getResponseBody();
+//		os.write(response.getBytes());
+//		os.close();
+//	}
+//
+//	private static void handleAboutRoute(HttpExchange exchange) throws IOException {
+//		String response = "This is the About page!";
+//		exchange.sendResponseHeaders(200, response.getBytes().length);
+//		OutputStream os = exchange.getResponseBody();
+//		os.write(response.getBytes());
+//		os.close();
+//	}
+//
+//	private static void catchFish(HttpExchange exchange) throws IOException {
+//		Fish randomFish = Player.getPlayer().catchFish();
+//		String response = randomFish.jsonify();
+//
+//		exchange.getResponseHeaders().set("Content-Type", "application/json");
+//		exchange.sendResponseHeaders(200, response.getBytes().length);
+//		OutputStream os = exchange.getResponseBody();
+//		os.write(response.getBytes());
+//		os.close();
+//	}
+//
+//	public static void getMoney(HttpExchange exchange) throws IOException {
+//	    String response = Double.toString(Player.getPlayer().getMoney());
+//	    response = "{ \"money\": \"" + response + "\" }";
+//
+//	    exchange.getResponseHeaders().set("Content-Type", "application/json");
+//	    exchange.sendResponseHeaders(200, response.getBytes().length);
+//
+//	    OutputStream os = exchange.getResponseBody();
+//	    os.write(response.getBytes());
+//	    os.close();
+//	}
+//	
+//	public static void rollChest(HttpExchange exchange) throws IOException {
+//	    String requestBody = readRequestBody(exchange);
+//
+//	    String itemName = parseItemNameFromJson(requestBody);
+//
+//	    System.out.println("Received item: " + itemName);
+//
+//	    String response = "Rolled chest with item: " + itemName;
+//	    exchange.sendResponseHeaders(200, response.getBytes().length);
+//	    exchange.getResponseBody().write(response.getBytes());
+//	    exchange.getResponseBody().close();
+//	}
+//
+//	private static String parseItemNameFromJson(String json) {
+//	    // Example of parsing JSON manually (using String methods or a library like Gson)
+//	    // For simplicity, assuming the json is like: {"itemName":"itemNameValue"}
+//	    int startIndex = json.indexOf(":") + 2;
+//	    int endIndex = json.indexOf("\"", startIndex);
+//	    return json.substring(startIndex, endIndex);
+//	}
+//
+//	private static String readRequestBody(HttpExchange exchange) throws IOException {
+//	    InputStreamReader isr = new InputStreamReader(exchange.getRequestBody());
+//	    BufferedReader reader = new BufferedReader(isr);
+//
+//	    StringBuilder body = new StringBuilder();
+//	    String line;
+//	    while ((line = reader.readLine()) != null) {
+//	        body.append(line);
+//	    }
+//
+//	    reader.close(); // Always close the reader after use
+//	    return body.toString();
+//	}
+}

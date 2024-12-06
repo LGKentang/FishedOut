@@ -1,0 +1,5 @@
+package enums.rod;
+
+public enum RodType {
+
+}
