@@ -9,27 +9,30 @@ public class Player {
     private String name;
     private Rod fishingRod;
     private double money;
+    
+    private static volatile Player player = null;
 
-    public static Player player = null;
-
-    public static Player getPlayer(){
-        if (player == null){
-        	RodFactory rf = new RodFactory();
-            player = new Player("1","Darren",100,rf.createDefaultRod());
+    public static Player getPlayer() {
+        if (player == null) {
+            synchronized (Player.class) {
+                if (player == null) {
+                    RodFactory rf = new RodFactory();
+                    player = new Player("1", "Darren", 100, rf.createDefaultRod());
+                }
+            }
         }
         return player;
     }
 
     public Rod getFishingRod() {
-		return fishingRod;
-	}
+        return fishingRod;
+    }
 
-	public void setFishingRod(Rod fishingRod) {
-		this.fishingRod = fishingRod;
-	}
+    public void setFishingRod(Rod fishingRod) {
+        this.fishingRod = fishingRod;
+    }
 
-
-	private Player(String id, String name, double money, Rod fishingRod) {
+    private Player(String id, String name, double money, Rod fishingRod) {
         this.id = id;
         this.name = name;
         this.money = money;
@@ -44,8 +47,6 @@ public class Player {
         return name;
     }
 
- 
-
     public double getMoney() {
         return money;
     }
@@ -58,10 +59,20 @@ public class Player {
         this.name = name;
     }
 
-
-
     public void setMoney(double money) {
         this.money = money;
+    }
+    
+    public void incrementMoney(double money) {
+        synchronized (this) {
+            this.money += money;
+        }
+    }
+    
+    public void decrementMoney(double money) {
+        synchronized (this) {
+            this.money -= money;
+        }
     }
 
     public Fish catchFish() {
@@ -69,13 +80,12 @@ public class Player {
         return fishFactory.catchRandomFish();
     }
 
-    //  public void sellFish(String fishId) {
-    //     Fish fishToSell = inventory.getFishById(fishId);
-    //     if (fishToSell != null && inventory.removeFish(fishId)) {
-    //         this.money += fishToSell.getPrice(); 
-    //     } else {
-    //         throw new IllegalArgumentException("Fish not found or already sold!");
-    //     }
-    // }
-
+    public String jsonify() {
+        return "{"
+                + "\"id\": \"" + id + "\", "
+                + "\"name\": \"" + name + "\", "
+                + "\"money\": " + money + ", "
+                + "\"rod\": " + (fishingRod != null ? fishingRod.jsonify() : "null")
+                + "}";
+    }
 }

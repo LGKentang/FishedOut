@@ -21,38 +21,6 @@ public class Inventory {
         }
         return inventory;
     }
-
-    public Fish getFishById(String fishId) {
-        return fishList.stream()
-                       .filter(fish -> fish.getId().equals(fishId))
-                       .findFirst()
-                       .orElse(null); 
-    }
-
-//    public Rod getRodById(String rodId) {
-//        return rodList.stream()
-//                      .filter(rod -> rod.getId().equals(rodId))
-//                      .findFirst()
-//                      .orElse(null); 
-//    }
-
-    public Fish removeFish(String fishId) {
-        Optional<Fish> fishToRemove = fishList.stream()
-                                              .filter(fish -> fish.getId().equals(fishId))
-                                              .findFirst();
-        if(fishToRemove.isPresent()) {
-            fishList.remove(fishToRemove.get());
-            return fishToRemove.get();
-        }
-        return null;
-    }
-
-    
-    public void moveFishToAquarium(String fishID) {
-        // Logic to move fish to the aquarium
-    }
-
-    public void sellFish(String fishID) {
-        // Logic to sell a fish
-    }
 }
+
+

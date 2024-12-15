@@ -66,7 +66,6 @@ public enum FishSize {
         return this.name() + " (Color: " + getColor() + ", Multiplier: " + getMultiplier() + ")";
     }
     public static FishSize getRandomSize() {
-        // Get a random index based on the FishSize enum length
         int randomIndex = random.nextInt(FishSize.values().length);
         return FishSize.values()[randomIndex];
     }

@@ -1,4 +1,0 @@
-module FishedOut {
-    requires jdk.httpserver; 
-    requires com.fasterxml.jackson.databind;
-}

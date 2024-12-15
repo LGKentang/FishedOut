@@ -14,11 +14,14 @@ public class FishFactory {
 	private static final Random RANDOM = new Random();
 
 	public Fish catchRandomFish() {
+		System.out.println(Player.getPlayer().getFishingRod());
+		
 		if (Player.getPlayer().getFishingRod() == null)
 			return null;
 		
 		
 		double[] rodProbabilities = Player.getPlayer().getFishingRod().getRodType().getRodRarity().getProbabilities();
+		System.out.println(rodProbabilities);
 		Random random = new Random();
 
 		double randValue = random.nextDouble();
@@ -37,8 +40,10 @@ public class FishFactory {
 			return null;
 		
 		FishType randomFish = FishType.getRandomFishByRarity(rarity);
-
+		System.out.println(randomFish);
 		Fish fish = new Fish(UUID.randomUUID().toString(), randomFish, FishSize.getRandomSize());
+		
+		System.out.println(fish.jsonify());
 		return fish;
 	}
 

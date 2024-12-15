@@ -1,0 +1,33 @@
+package enums.fish;
+
+public enum FishRarity {
+	Common, Rare, Epic, Legendary, Mythic;
+
+
+	private static final int[] basePrice = { 30, 75, 125, 200, 400 };
+    private static final String[] colors = {
+            "#ADD8E6", // XS: Light Blue
+            "#87CEEB", // S: Sky Blue
+            "#00008B", // XXL: Dark Blue
+            "#800080", // Jumbo: Purple
+            "#FF0000", // MEGA: Red
+    };
+    
+    public String getColor() {
+    	return colors[this.ordinal()];
+    }
+    
+	public int getBasePrice() {
+		return basePrice[this.ordinal()];
+	}
+
+	public static FishRarity fromString(String rarity) {
+		for (FishRarity fr : FishRarity.values()) {
+			if (fr.name().equalsIgnoreCase(rarity)) {
+				return fr;
+			}
+		}
+		return null;
+	}
+
+}

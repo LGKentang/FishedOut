@@ -6,7 +6,11 @@ public enum RodType {
 	Default,
 	Leaf,
 	Mechanical,
-	Industrial;
+	Industrial,
+	Katana,
+	Falcon,
+	Divine
+	;
 	
 	
 	public static RodRarity[] rarities = {
@@ -14,6 +18,9 @@ public enum RodType {
 		RodRarity.Common,
 		RodRarity.Rare,
 		RodRarity.Epic,
+		RodRarity.Legendary,
+		RodRarity.Legendary,
+		RodRarity.Mythic
 	};
 	
 	public RodRarity getRodRarity() {

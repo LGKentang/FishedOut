@@ -1,55 +1,34 @@
 package main;
 
-import com.sun.net.httpserver.HttpServer;
-
-import factory.FishFactory;
-import factory.RodFactory;
-
-import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpExchange;
-
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+import factory.RodFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import model.Aquarium;
 import model.Fish;
 import model.Inventory;
 import model.Player;
 import model.Rod;
 
 public class Main {
-	private Player player;
-	private Inventory inventory;
-	private Aquarium aquarium;
-	
-//	public static void main(String[] args) {
-//		FishFactory ff = new FishFactory();
-//		Player.getPlayer();
-//		Player.getPlayer().setFishingRod(new Rod("20","Industrial"));
-//		
-//		System.out.println(ff.catchRandomFish().jsonify());
-//	}
-	
-	public static void setEnv() {
-		Player.getPlayer();
-	}
-
 	public static void main(String[] args) throws IOException {
-		
-		setEnv();
-		
 		HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
 
 		registerRoute(server, "/index", Main::handleIndexRoute);
 		registerRoute(server, "/about", Main::handleAboutRoute);
 		registerRoute(server, "/catchFish", Main::catchFish);
-
 		registerRoute(server, "/getMoney", Main::getMoney);
 		registerRoute(server, "/rollChest", Main::rollChest);
-		
-		
+		registerRoute(server, "/setPlayer", Main::handleSetPlayer);
+		registerRoute(server, "/setRod", Main::setRod);
+		registerRoute(server, "/addMoney", Main::addMoney);
+		registerRoute(server, "/removeMoney", Main::removeMoney);
+		registerRoute(server, "/getRod", Main::getRod);
+			
 		server.setExecutor(null);
 		System.out.println("Server started at http://localhost:8080");
 		server.start();
@@ -57,6 +36,26 @@ public class Main {
 
 	private static void registerRoute(HttpServer server, String context, HttpHandler handler) {
 		server.createContext(context, handler);
+	}
+	
+	private static void handleSetPlayer(HttpExchange exchange) throws IOException {
+	    Player player = Player.getPlayer();
+	    Inventory.getInventory();
+	    if (player == null) {
+	        String errorResponse = "{ \"error\": \"Player not found\" }";
+	        exchange.sendResponseHeaders(500, errorResponse.getBytes().length);
+	        OutputStream os = exchange.getResponseBody();
+	        os.write(errorResponse.getBytes());
+	        os.close();
+	        return;
+	    }
+	    
+	    String response = player.jsonify();
+	    
+	    exchange.sendResponseHeaders(200, response.getBytes().length);
+	    OutputStream os = exchange.getResponseBody();
+	    os.write(response.getBytes());
+	    os.close();
 	}
 
 	private static void handleIndexRoute(HttpExchange exchange) throws IOException {
@@ -86,18 +85,37 @@ public class Main {
 		os.close();
 	}	
 	
-	private static void setRod(HttpExchange exchange) throws IOException {
-	    String requestBody = readRequestBody(exchange);
-		String response = parseFromJson(requestBody);
-		
-		RodFactory rf = new RodFactory();
-		Player.getPlayer().setFishingRod(rf.createRod(response));
+	public static void setRod(HttpExchange exchange) throws IOException {
 
-		exchange.getResponseHeaders().set("Content-Type", "application/json");
-		exchange.sendResponseHeaders(200, response.getBytes().length);
-		OutputStream os = exchange.getResponseBody();
-		os.write(response.getBytes());
-		os.close();
+	    if (!"GET".equals(exchange.getRequestMethod())) {
+	        exchange.sendResponseHeaders(405, -1); 
+	        return;
+	    }
+
+	    String query = exchange.getRequestURI().getQuery();
+	    String rodName = null;
+	    if (query != null && query.contains("rodName=")) {
+	        rodName = query.split("=")[1];
+	    }
+
+	    if (rodName == null) {
+	        String errorResponse = "{ \"error\": \"Missing or invalid 'rodName' query parameter\" }";
+	        exchange.sendResponseHeaders(400, errorResponse.getBytes().length); // Bad Request
+	        OutputStream os = exchange.getResponseBody();
+	        os.write(errorResponse.getBytes());
+	        os.close();
+	        return;
+	    }
+	    RodFactory rf = new RodFactory();
+	    Rod r = rf.createRod(rodName);
+	    Player.getPlayer().setFishingRod(r);
+
+	    String response = r.jsonify();
+	    exchange.getResponseHeaders().set("Content-Type", "application/json");
+	    exchange.sendResponseHeaders(200, response.getBytes().length); // OK
+	    OutputStream os = exchange.getResponseBody();
+	    os.write(response.getBytes());
+	    os.close();
 	}
 
 	public static void getMoney(HttpExchange exchange) throws IOException {
@@ -112,6 +130,106 @@ public class Main {
 	    os.close();
 	}
 	
+	public static void getRod(HttpExchange exchange) throws IOException{
+	    String query = exchange.getRequestURI().getQuery();
+	    String rodName = null;
+	    if (query != null && query.contains("rodName=")) {
+	        rodName = query.split("=")[1];
+	    }
+	    
+	    RodFactory rf = new RodFactory();
+	    Rod rod = rf.createRod(rodName);
+	    
+	    String response = rod.jsonify();
+	    exchange.getResponseHeaders().set("Content-Type", "application/json");
+	    exchange.sendResponseHeaders(200, response.getBytes().length);
+
+	    OutputStream os = exchange.getResponseBody();
+	    os.write(response.getBytes());
+	    os.close();
+	}
+	
+	public static void addMoney(HttpExchange exchange) throws IOException {
+	    if (!"GET".equals(exchange.getRequestMethod())) {
+	        exchange.sendResponseHeaders(405, -1); // Method Not Allowed
+	        return;
+	    }
+
+	    String query = exchange.getRequestURI().getQuery();
+	    String amountStr = null;
+	    if (query != null && query.contains("amount=")) {
+	        amountStr = query.split("=")[1];
+	    }
+
+	    if (amountStr == null) {
+	        String errorResponse = "{ \"error\": \"Missing or invalid 'amount' query parameter\" }";
+	        exchange.sendResponseHeaders(400, errorResponse.getBytes().length); // Bad Request
+	        OutputStream os = exchange.getResponseBody();
+	        os.write(errorResponse.getBytes());
+	        os.close();
+	        return;
+	    }
+
+	    try {
+	        double amount = Double.parseDouble(amountStr);
+	        Player.getPlayer().incrementMoney(amount); // Update the player's money
+	        String response = "{ \"success\": true, \"newMoney\": " + Player.getPlayer().getMoney() + " }";
+	        exchange.getResponseHeaders().set("Content-Type", "application/json");
+	        exchange.sendResponseHeaders(200, response.getBytes().length); // OK
+	        OutputStream os = exchange.getResponseBody();
+	        os.write(response.getBytes());
+	        os.close();
+	    } catch (NumberFormatException e) {
+	        String errorResponse = "{ \"error\": \"Invalid amount format\" }";
+	        exchange.sendResponseHeaders(400, errorResponse.getBytes().length); // Bad Request
+	        OutputStream os = exchange.getResponseBody();
+	        os.write(errorResponse.getBytes());
+	        os.close();
+	    }
+	}
+	
+	public static void removeMoney(HttpExchange exchange) throws IOException {
+	    if (!"GET".equals(exchange.getRequestMethod())) {
+	        exchange.sendResponseHeaders(405, -1); // Method Not Allowed
+	        return;
+	    }
+
+	    String query = exchange.getRequestURI().getQuery();
+	    String amountStr = null;
+	    if (query != null && query.contains("amount=")) {
+	        amountStr = query.split("=")[1];
+	    }
+
+	    if (amountStr == null) {
+	        String errorResponse = "{ \"error\": \"Missing or invalid 'amount' query parameter\" }";
+	        exchange.sendResponseHeaders(400, errorResponse.getBytes().length); // Bad Request
+	        OutputStream os = exchange.getResponseBody();
+	        os.write(errorResponse.getBytes());
+	        os.close();
+	        return;
+	    }
+
+	    try {
+	        double amount = Double.parseDouble(amountStr);
+	        if (Player.getPlayer().getMoney() >= amount) {
+	        	Player.getPlayer().decrementMoney(amount); 
+	        }
+	        
+	        String response = "{ \"success\": true, \"newMoney\": " + Player.getPlayer().getMoney() + " }";
+	        exchange.getResponseHeaders().set("Content-Type", "application/json");
+	        exchange.sendResponseHeaders(200, response.getBytes().length); // OK
+	        OutputStream os = exchange.getResponseBody();
+	        os.write(response.getBytes());
+	        os.close();
+	    } catch (NumberFormatException e) {
+	        String errorResponse = "{ \"error\": \"Invalid amount format\" }";
+	        exchange.sendResponseHeaders(400, errorResponse.getBytes().length); // Bad Request
+	        OutputStream os = exchange.getResponseBody();
+	        os.write(errorResponse.getBytes());
+	        os.close();
+	    }
+	}
+
 	public static void rollChest(HttpExchange exchange) throws IOException {
 	    String requestBody = readRequestBody(exchange);
 
@@ -126,8 +244,6 @@ public class Main {
 	}
 
 	private static String parseFromJson(String json) {
-	    // Example of parsing JSON manually (using String methods or a library like Gson)
-	    // For simplicity, assuming the json is like: {"itemName":"itemNameValue"}
 	    int startIndex = json.indexOf(":") + 2;
 	    int endIndex = json.indexOf("\"", startIndex);
 	    return json.substring(startIndex, endIndex);
@@ -143,7 +259,7 @@ public class Main {
 	        body.append(line);
 	    }
 
-	    reader.close(); // Always close the reader after use
+	    reader.close();
 	    return body.toString();
 	}
 }

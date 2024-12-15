@@ -2,13 +2,20 @@
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
-    <fullyQualifiedTypeName name="factory.FishFactory"/>
-    <fullyQualifiedTypeName name="model.Rod"/>
     <fullyQualifiedTypeName name="java.util.Optional"/>
-    <fullyQualifiedTypeName name="model.Player"/>
     <fullyQualifiedTypeName name="model.Inventory"/>
     <fullyQualifiedTypeName name="model.Aquarium"/>
-    <fullyQualifiedTypeName name="model.Fish"/>
     <fullyQualifiedTypeName name="java.io.InputStreamReader"/>
     <fullyQualifiedTypeName name="java.io.BufferedReader"/>
+    <fullyQualifiedTypeName name="model.Player"/>
+    <fullyQualifiedTypeName name="enums.rod.RodRarity"/>
+    <fullyQualifiedTypeName name="enums.fish.FishRarity"/>
+    <fullyQualifiedTypeName name="factory.FishFactory"/>
+    <fullyQualifiedTypeName name="enums.fish.FishType"/>
+    <fullyQualifiedTypeName name="model.Fish"/>
+    <fullyQualifiedTypeName name="java.util.Random"/>
+    <fullyQualifiedTypeName name="enums.fish.FishSize"/>
+    <fullyQualifiedTypeName name="enums.rod.RodType"/>
+    <fullyQualifiedTypeName name="model.Rod"/>
+    <fullyQualifiedTypeName name="factory.RodFactory"/>
 </qualifiedTypeNameHistroy>

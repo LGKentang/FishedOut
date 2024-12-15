@@ -1,6 +1,12 @@
 package enums.rod;
 
-import java.util.Arrays;
+import strategy.CommonRodStrategy;
+import strategy.DefaultRodStrategy;
+import strategy.EpicRodStrategy;
+import strategy.FishingStrategy;
+import strategy.LegendaryRodStrategy;
+import strategy.MythicRodStrategy;
+import strategy.RareRodStrategy;
 
 public enum RodRarity {
 	Default, Common, Rare, Epic, Legendary, Mythic;
@@ -29,8 +35,18 @@ public enum RodRarity {
 			"#87CEEB", // Common
 			"#6495ED", // Rare
 			"#1E90FF", // Epic
-			"#4169E1", // Legendary
-			"#00008B" // Mythic
+			"#eda024", // Legendary
+			"#ff2b4f" // Mythic
+	};
+	
+	
+	private static final FishingStrategy[] strategies = {
+			new DefaultRodStrategy(),
+			new CommonRodStrategy(),
+			new RareRodStrategy(),
+			new EpicRodStrategy(),
+			new LegendaryRodStrategy(),
+			new MythicRodStrategy(),
 	};
 
 	public double[] getProbabilities() {
@@ -44,6 +60,10 @@ public enum RodRarity {
 	public String getColor() {
 		return colors[this.ordinal()];
 	}
+	
+	public FishingStrategy getStrategy() {
+		return strategies[this.ordinal()];
+	}
 
 	public static RodRarity fromString(String rarity) {
 		for (RodRarity rr : RodRarity.values()) {
@@ -55,7 +75,6 @@ public enum RodRarity {
 	}
 
 	static {
-		// Validate array lengths
 		if (basePrice.length != RodRarity.values().length || probabilities.length != RodRarity.values().length
 				|| colors.length != RodRarity.values().length) {
 			throw new IllegalStateException("Arrays length mismatch with RodRarity enum.");
